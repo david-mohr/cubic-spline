@@ -1,12 +1,19 @@
-module.exports = function spline(x, xs, ys) {
-  var ks = xs.map(function(){return 0})
-  ks = getNaturalKs(xs, ys, ks)
+function Spline(xs, ys) {
+  this.xs = xs;
+  this.ys = ys;
+  this.ks = xs.map(function(){return 0});
+  this.ks = getNaturalKs(xs, ys, this.ks);
+}
+
+module.exports = Spline;
+
+Spline.prototype.get = function(x) {
   var i = 1;
-  while(xs[i]<x) i++;
-  var t = (x - xs[i-1]) / (xs[i] - xs[i-1]);
-  var a =  ks[i-1]*(xs[i]-xs[i-1]) - (ys[i]-ys[i-1]);
-  var b = -ks[i]*(xs[i]-xs[i-1]) + (ys[i]-ys[i-1]);
-  var q = (1-t)*ys[i-1] + t*ys[i] + t*(1-t)*(a*(1-t)+b*t);
+  while(this.xs[i]<x) i++;
+  var t = (x - this.xs[i-1]) / (this.xs[i] - this.xs[i-1]);
+  var a =  this.ks[i-1]*(this.xs[i]-this.xs[i-1]) - (this.ys[i]-this.ys[i-1]);
+  var b = -this.ks[i]*(this.xs[i]-this.xs[i-1]) + (this.ys[i]-this.ys[i-1]);
+  var q = (1-t)*this.ys[i-1] + t*this.ys[i] + t*(1-t)*(a*(1-t)+b*t);
   return q;
 }
 
